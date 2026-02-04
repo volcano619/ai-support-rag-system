@@ -1,0 +1,28 @@
+# Core dependencies for RAG system
+# All versions pinned for reproducibility
+
+# Data Processing
+pandas>=2.1.4
+numpy>=1.26.0
+
+# Vector Embeddings & Search
+sentence-transformers>=2.2.2      # For semantic embeddings
+faiss-cpu>=1.7.4                  # Vector similarity search (CPU version)
+
+# Local LLM Support (Hugging Face)
+transformers>=4.36.0              # For Flan-T5
+accelerate>=0.26.0                # For model optimization
+sentencepiece>=0.1.99             # Tokenizer for T5
+torch>=2.1.0                      # Deep Learning framework
+# google-generativeai             # Removed (using local model)
+
+# Evaluation Metrics
+scikit-learn>=1.3.0               # For similarity metrics
+rouge-score>=0.1.2                # For ROUGE evaluation
+
+# Web Interface
+streamlit>=1.29.0                 # Interactive web app
+
+# Utilities
+python-dotenv>=1.0.0              # Environment variable management
+tqdm>=4.66.0                      # Progress bars
