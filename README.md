@@ -13,11 +13,11 @@ This document presents the business case for a **Retrieval-Augmented Generation 
 
 ## 📸 Business Results
 
-### RAG Chat Interface — Grounded Q&A with Source Citations
-![RAG Chat Demo — showing grounded answers with source documents and relevance scores](./screenshots/rag_chat_demo.png)
-
 ### Business Impact Dashboard — Cost Savings & ROI
-![RAG Business Impact — $1.08M annual savings, 90% faster resolution, 5-10x ROI](./screenshots/rag_business_impact.png)
+![RAG Business Impact — $1.08M annual savings, 90% faster resolution, 5-10x ROI](./screenshots/rag_business_impact_v2.png)
+
+### RAG Chat Interface — Grounded Q&A with Source Citations
+![RAG Solution UI — Grounded AI chat with source citations and semantic search](./screenshots/rag_solution_ui_v2.png)
 
 ---
 
