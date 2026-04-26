@@ -19,6 +19,8 @@ This document presents the business case for a **Retrieval-Augmented Generation 
 ### RAG Chat Interface — Grounded Q&A with Source Citations
 ![RAG Solution UI — Grounded AI chat with source citations and semantic search](./screenshots/rag_solution_ui_v2.png)
 
+**🔴 Live Cloud Deployment:** [https://huggingface.co/spaces/vnicks177/RAGbasedsolution-demo](https://huggingface.co/spaces/vnicks177/RAGbasedsolution-demo)
+
 ---
 
 ## 1. Business Problem
