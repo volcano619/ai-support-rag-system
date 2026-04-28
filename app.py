@@ -202,7 +202,7 @@ if query:
         # Display Sources/Citations
         st.markdown("### 📚 Sources Used")
         for s in sources:
-            with st.expander(f"Document {s['number']}: {s['topic']} (Relevance: {s['score']:.2%})"):
+            with st.expander(f"Document {s['number']}: {s['topic']} (Relevance Score: {s['score']:.3f})"):
                 st.markdown(f"**From ID:** `{s['id']}`")
                 if 'metadata' in s and 'stage1_score' in s['metadata']:
                     st.caption(f"Stage 1 Score (FAISS): {s['metadata']['stage1_score']:.3f}")
