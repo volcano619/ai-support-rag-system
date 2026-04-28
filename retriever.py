@@ -244,6 +244,7 @@ class Retriever:
                 "number": i,
                 "id": ki.id,
                 "topic": ki.topic,
+                "text": ki.text,
                 "score": score,
                 "metadata": metadata
             })

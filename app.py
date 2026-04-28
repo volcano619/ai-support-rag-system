@@ -84,10 +84,16 @@ with st.sidebar:
     st.title("⚙️ RAG Settings")
     
     st.markdown("### Retrieval")
-    top_k = st.slider("Documents to Retrieve", min_value=1, max_value=5, value=3)
+    if "top_k" not in st.session_state:
+        from config import RETRIEVAL_TOP_K
+        st.session_state.top_k = RETRIEVAL_TOP_K
+    top_k = st.slider("Documents to Retrieve", min_value=1, max_value=5, key="top_k")
     
     st.markdown("### Generation")
-    temperature = st.slider("Temperature (Creativity)", 0.0, 1.0, 0.0, 0.1)
+    if "temperature" not in st.session_state:
+        from config import LLM_TEMPERATURE
+        st.session_state.temperature = LLM_TEMPERATURE
+    temperature = st.slider("Temperature (Creativity)", 0.0, 1.0, key="temperature", step=0.1)
     
     st.markdown("---")
     st.markdown("### Debug Info")
@@ -194,10 +200,7 @@ if query:
                     st.caption(f"Stage 2 Score (Reranker): {s['metadata']['stage2_score']:.3f}")
                 
                 # Show snippet
-                # Find matching Knowledge Item text from context
-                # (Simple text display)
-                pass 
-        
+                st.markdown(f"**Knowledge Content:**\n{s['text']}")        
         # Debug Metadata
         if st.checkbox("Show Generation Metadata"):
             st.json(metadata)
