@@ -24,8 +24,35 @@ def apply_global_theme():
         
         [data-testid="stSidebar"] .stMarkdown, 
         [data-testid="stSidebar"] label, 
-        [data-testid="stSidebar"] .stSelectbox label {
+        [data-testid="stSidebar"] .stSelectbox label,
+        [data-testid="stSidebar"] .stSlider label,
+        [data-testid="stSidebar"] .stMultiSelect label,
+        [data-testid="stSidebar"] .stNumberInput label,
+        [data-testid="stSidebar"] .stDateInput label {
             color: #CBD5E1 !important;
+        }
+
+        /* Sidebar Input Contrast */
+        [data-testid="stSidebar"] input {
+            background-color: #1E293B !important;
+            color: #F8FAFC !important;
+            border-color: #334155 !important;
+        }
+
+        /* Sidebar Button Styling (Legibility) */
+        [data-testid="stSidebar"] button {
+            background-color: #1E293B !important;
+            color: #F8FAFC !important;
+            border: 1px solid #334155 !important;
+        }
+        
+        [data-testid="stSidebar"] button:hover {
+            background-color: #334155 !important;
+            border-color: #475569 !important;
+        }
+        
+        [data-testid="stSidebar"] button p {
+            color: #F8FAFC !important;
         }
 
         /* Metric Cards */
