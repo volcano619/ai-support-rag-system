@@ -116,6 +116,15 @@ with st.sidebar:
         st.session_state.temperature = LLM_TEMPERATURE
     temperature = st.slider("Temperature (Creativity)", 0.0, 1.0, key="temperature", step=0.1)
     
+    # Help Section
+    shared_ui.add_help_section(
+        "RAG Support System",
+        "Intelligent AI assistant that answers IT support questions using a private knowledge base.",
+        "Type any IT-related question in the chat. The system retrieves relevant docs and synthesizes an answer.",
+        "Traditional keyword search (Ctrl+F) only finds matches; this system synthesizes actionable answers with citations.",
+        "Searching 'VPN setup' in a 500-page PDF is slow; RAG gives you a 3-step summary with page numbers instantly."
+    )
+    
     st.markdown("---")
     st.markdown("### 🛰️ System Status")
     status_cols = st.columns(2)

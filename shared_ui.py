@@ -156,3 +156,21 @@ def add_header(title, subtitle):
     """Add a consistent header to the app."""
     st.markdown(f'<div class="main-header">{title}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="sub-header">{subtitle}</div>', unsafe_allow_html=True)
+
+def add_help_section(app_name, description, how_to_use, why_better, example):
+    """Add a TL;DR Help section to the sidebar."""
+    with st.sidebar:
+        st.markdown("---")
+        with st.expander("❓ Help & Documentation", expanded=False):
+            st.markdown(f"### 🎯 {app_name}")
+            st.markdown(f"**What it does:**\n{description}")
+            st.markdown(f"**How to use:**\n{how_to_use}")
+            
+            st.markdown("---")
+            st.markdown("**🚀 Why it's better:**")
+            st.markdown(why_better)
+            
+            st.markdown("**💡 Example:**")
+            st.info(example)
+            
+            st.markdown("<small>Version 1.5.0-Premium</small>", unsafe_allow_html=True)
