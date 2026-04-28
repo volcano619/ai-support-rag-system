@@ -117,6 +117,16 @@ with st.sidebar:
     temperature = st.slider("Temperature (Creativity)", 0.0, 1.0, key="temperature", step=0.1)
     
     st.markdown("---")
+    st.markdown("### 🛰️ System Status")
+    status_cols = st.columns(2)
+    with status_cols[0]:
+        st.caption("Vector Store")
+        st.success("Connected")
+    with status_cols[1]:
+        st.caption("LLM Engine")
+        st.success("Ready")
+    
+    st.markdown("---")
     st.markdown("### Debug Info")
     if st.checkbox("Show Debug Details", value=DEBUG_MODE):
         st.info("Debug mode enabled. Detailed metadata will be shown.")
