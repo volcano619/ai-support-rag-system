@@ -26,3 +26,4 @@ streamlit>=1.29.0                 # Interactive web app
 # Utilities
 python-dotenv>=1.0.0              # Environment variable management
 tqdm>=4.66.0                      # Progress bars
+plotly>=5.15.0
