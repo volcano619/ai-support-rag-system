@@ -1,0 +1,27 @@
+name: Keep Hugging Face Spaces Active
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at 00:00 UTC (every 24 hours - well under the 48-hour timeout limit)
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions interface
+
+jobs:
+  ping-spaces:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping HF Spaces
+        run: |
+          echo "Pinging RAGbasedsolution..."
+          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-ragbasedsolution-demo.hf.space
+          
+          echo "Pinging RecommenderSystem..."
+          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-recommendersystem-demo.hf.space
+          
+          echo "Pinging SentimentAnalysis..."
+          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-sentimentanalysis-demo.hf.space
+          
+          echo "Pinging ComputerVision..."
+          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks179-computervision-demo.hf.space
+          
+          echo "Pinging TimeSeriesForecasting..."
+          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks179-timeseriesforecasting-demo.hf.space
