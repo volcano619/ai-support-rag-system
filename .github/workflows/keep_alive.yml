@@ -2,26 +2,37 @@ name: Keep Hugging Face Spaces Active
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at 00:00 UTC (every 24 hours - well under the 48-hour timeout limit)
+    - cron: '0 */8 * * *' # Checked every 8 hours UTC
   workflow_dispatch: # Allows manual trigger from the GitHub Actions interface
 
 jobs:
   ping-spaces:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping HF Spaces
+      - name: Check 40-Hour Interval Window
         run: |
-          echo "Pinging RAGbasedsolution..."
-          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-ragbasedsolution-demo.hf.space
+          EPOCH_HOUR=$(( $(date +%s) / 3600 ))
+          MODULO=$(( EPOCH_HOUR % 40 ))
+          echo "Current epoch hour: $EPOCH_HOUR"
+          echo "Modulo 40: $MODULO"
           
-          echo "Pinging RecommenderSystem..."
-          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-recommendersystem-demo.hf.space
-          
-          echo "Pinging SentimentAnalysis..."
-          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-sentimentanalysis-demo.hf.space
-          
-          echo "Pinging ComputerVision..."
-          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks179-computervision-demo.hf.space
-          
-          echo "Pinging TimeSeriesForecasting..."
-          curl -s -o /dev/null -w "%{http_code}\n" https://vnicks179-timeseriesforecasting-demo.hf.space
+          if [ $MODULO -lt 4 ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Within the 40-hour ping window. Executing keep-alive pings..."
+            
+            echo "Pinging RAGbasedsolution..."
+            curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-ragbasedsolution-demo.hf.space
+            
+            echo "Pinging RecommenderSystem..."
+            curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-recommendersystem-demo.hf.space
+            
+            echo "Pinging SentimentAnalysis..."
+            curl -s -o /dev/null -w "%{http_code}\n" https://vnicks177-sentimentanalysis-demo.hf.space
+            
+            echo "Pinging ComputerVision..."
+            curl -s -o /dev/null -w "%{http_code}\n" https://vnicks179-computervision-demo.hf.space
+            
+            echo "Pinging TimeSeriesForecasting..."
+            curl -s -o /dev/null -w "%{http_code}\n" https://vnicks179-timeseriesforecasting-demo.hf.space
+          else
+            echo "Skipping ping (pings occur strictly once every 40 hours to optimize resources)."
+          fi
