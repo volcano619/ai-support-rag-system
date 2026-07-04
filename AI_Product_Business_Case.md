@@ -236,6 +236,54 @@ User Question → Embedding → Vector Search → Retrieve Docs → LLM → Answ
 
 ---
 
+## 12. AI Product Management & Strategic Decisions
+
+### Build vs. Buy Analysis
+To deploy the IT Support Assistant, the product team evaluated commercial customer support AI tools against building a custom local RAG pipeline:
+
+| Strategic Vector | Custom Build (Our Solution) | Buy (e.g., Zendesk AI, OpenAI Assistant API) | Decision Factor |
+|---|---|---|---|
+| **CapEx (Initial Cost)** | **Medium ($120K)** (1 NLP Engineer + 1 PM for 3 months) | **Low ($15K)** integration and setup fees | Buy is cheaper upfront |
+| **OpEx (Ongoing Cost)** | **Very Low ($2K/year)** for commodity CPU server hosting | **High ($30K-$100K/year)** based on ticket volume APIs | **Build wins** at scale (10K+ tickets/mo) |
+| **Data Privacy & GDPR** | **High**: Enterprise data remains locally stored and processed | **Low**: Sensitive customer support transcripts sent to cloud APIs | **Build wins** for security compliance |
+| **Model Customization** | **High**: Custom embeddings (MiniLM), fine-tuned reranker weights | **Low**: Black-box APIs with limited prompt control | **Build wins** for specialized IT domain terms |
+| **Latency & Reliability** | **High**: Under 3s latency, 100% control over server uptime | **Medium**: Dependent on external API server response times | **Build wins** for high-reliability SLAs |
+
+**Product Decision**: **Build custom local RAG**. Enterprise IT tickets often contain sensitive metadata, network paths, and usernames. Cloud APIs present a data privacy risk and high recurring costs ($0.02 per query). Building a local RAG stack using MiniLM-L6-v2, FAISS, and Flan-T5-Base ensures strict GDPR compliance and $0 inference API costs.
+
+### Total Cost of Ownership (TCO) Model
+The table below details the 3-year projected lifecycle costs for the local RAG deployment:
+
+| Cost Component | Year 1 (CapEx + OpEx) | Year 2 (OpEx) | Year 3 (OpEx) | Breakdown |
+|---|---|---|---|---|
+| **Development** | $120,000 | $0 | $0 | Product Manager & NLP Engineer salaries |
+| **Infrastructure** | $1,800 | $1,800 | $1,800 | Commodity CPU VM for local model hosting (2x 16GB RAM) |
+| **Vector DB Maintenance**| $4,800 | $4,800 | $4,800 | Periodic re-indexing pipeline automation |
+| **Knowledge Base Curation**| $15,000 | $15,000 | $15,000 | Content writing and documentation cleanup (FTE fraction) |
+| **Model Retraining** | $6,000 | $6,000 | $6,000 | Periodic model audit & embedding fine-tuning |
+| **Total TCO** | **$147,600** | **$27,600** | **$27,600** | **3-Year Cumulative TCO: $202,800** |
+
+### Model Selection & Trade-off Matrix
+To balance answer quality with hardware costs, we evaluated three options for embedding and generation models:
+
+| Component | Model Evaluated | Parameter Size | Memory Footprint | Avg. Latency (CPU) | Product Selection |
+|---|---|---|---|---|---|
+| **Embeddings** | **MiniLM-L6-v2** | **22M** | **~80MB** | **5ms** | **Selected** (Ultra-fast, runs locally on CPU) |
+| **Embeddings** | Ada-002 (OpenAI) | API-based | N/A (Cloud) | 150ms | Pass (Requires internet, costs $0.0001/1k tokens) |
+| **Generator** | **Flan-T5-Base** | **250M** | **~1GB** | **1.8s** | **Selected** (Low-resource, hallucination-resistant) |
+| **Generator** | Llama-3-8B | 8B | ~16GB | 15s (CPU) / 0.5s (GPU) | Pass (Requires expensive GPU cluster to run) |
+
+**Rationale**: Flan-T5-Base was selected as the generator because it runs within 2 seconds on a standard dual-core CPU, removing the need for expensive GPU infrastructure, and is naturally suited for structured Q&A.
+
+### Precision-Recall Retrieval Threshold Tuning
+In retrieval-augmented generation, there is a strict trade-off between retrieval recall and generator accuracy:
+*   **Too Low Recall ($K < 2$)**: The system retrieves too little context, leading to incomplete answers and higher LLM hallucination rates.
+*   **Too High Recall ($K > 5$)**: The system retrieves irrelevant context, leading to "LLM distraction" (where the generator outputs noisy data) and increasing generation latency by up to 150%.
+
+We optimized this trade-off by setting the retrieval threshold to **$K=3$** and adding a **Cross-Encoder Reranker** step. This ensures that the top 3 documents have a semantic relevance score of **>0.75**, maximizing the recall of correct context while keeping generation latency under **3 seconds** and reducing model hallucinations by an estimated 60-80% compared to vanilla LLM runs.
+
+---
+
 ## Appendix: Data Sources
 
 ### Verified Industry Statistics

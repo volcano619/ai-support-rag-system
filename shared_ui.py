@@ -12,8 +12,22 @@ def apply_global_theme():
 
         /* Base App Styling */
         .stApp {
-            background-color: #F8FAFC;
+            background-color: #F8FAFC !important;
             font-family: 'Inter', sans-serif;
+        }
+
+        /* Force Light Mode Contrast on Main Content (Agent C - QA) */
+        .main p, .main span, .main label, .main li, .main h1, .main h2, .main h3, .main h4, .main h5, .main h6, .main code {
+            color: #0F172A !important;
+        }
+        
+        /* Chat Message Styling override for dark mode system default */
+        [data-testid="stChatMessage"] {
+            background-color: #F1F5F9 !important;
+            border: 1px solid #E2E8F0 !important;
+        }
+        [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span {
+            color: #0F172A !important;
         }
 
         /* Sidebar Styling */

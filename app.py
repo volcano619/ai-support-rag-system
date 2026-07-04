@@ -28,6 +28,7 @@ from vector_store import VectorStore
 from retriever import Retriever
 from generator import Generator
 import shared_ui
+import navigation
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +47,7 @@ st.markdown("""
         border-radius: 8px;
         border: 1px solid #E2E8F0;
         background-color: white;
+        color: #0F172A !important;
         transition: all 0.2s;
     }
     div.stButton > button:hover {
@@ -119,10 +121,10 @@ with st.sidebar:
     # Help Section
     shared_ui.add_help_section(
         "RAG Support System",
-        "Intelligent AI assistant that answers IT support questions using a private knowledge base.",
-        "Type any IT-related question in the chat. The system retrieves relevant docs and synthesizes an answer.",
-        "Traditional keyword search (Ctrl+F) only finds matches; this system synthesizes actionable answers with citations.",
-        "Searching 'VPN setup' in a 500-page PDF is slow; RAG gives you a 3-step summary with page numbers instantly."
+        "Intelligent AI assistant that deflection-saves IT support tickets using FAISS vector search and Flan-T5.",
+        "Type any question. The system retrieves documents, alerts you if confidence is low, and streams the answer.",
+        "Traditional keyword search only finds matches; this system defers support loads and tracks ROI ($20 deflection savings). Also features hallucination-guards when relevance is low.",
+        "Type 'Reset PIN' to see the live deflection calculator tick up and display cost savings in real-time."
     )
     
     st.markdown("---")
@@ -139,6 +141,16 @@ with st.sidebar:
     st.markdown("### Debug Info")
     if st.checkbox("Show Debug Details", value=DEBUG_MODE):
         st.info("Debug mode enabled. Detailed metadata will be shown.")
+
+    # Deflection Calculator (Agent B - BA)
+    st.markdown("---")
+    st.markdown("### 💰 Deflection Savings")
+    deflected = st.session_state.get("deflected_tickets", 0)
+    savings = deflected * 20
+    st.metric("Tickets Deflected", deflected, delta=f"${savings} Saved*", help="Based on $20 average cost per L1 ticket deflection")
+    
+    # Portfolio Navigation (Agent D - PM)
+    navigation.add_portfolio_navigation("RAGbasedsolution")
 
 # ============================================================================
 # MAIN INTERFACE
@@ -215,8 +227,23 @@ if query:
             
             status.update(label="Complete!", state="complete", expanded=False)
         
-        # Display Answer
-        st.markdown(response)
+        # Hallucination check (Agent C - QA)
+        max_score = max([s.get('score', 0.0) for s in sources]) if sources else 0.0
+        if max_score < 0.35:
+            st.warning("⚠️ **Low Retrieval Confidence**: The retrieved support documents have low relevance. The synthesized response may contain inaccuracies (hallucinations). Please verify with human support.")
+
+        # Display Answer using Stream Output (Agent A - Developer)
+        def stream_response_text(text):
+            for word in text.split(" "):
+                yield word + " "
+                time.sleep(0.01)
+        
+        st.write_stream(stream_response_text(response))
+        
+        # Increment Deflected Tickets (Agent B - BA)
+        if "deflected_tickets" not in st.session_state:
+            st.session_state.deflected_tickets = 0
+        st.session_state.deflected_tickets += 1
         
         # Display Sources/Citations
         st.markdown("### 📚 Sources Used")
